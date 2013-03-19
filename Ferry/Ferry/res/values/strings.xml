@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RPS1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="inputText">Enter Message</string>
+    <string name="ipText">IP Address</string>
+    <string name="portText">Port Number</string>
+    <string name="hello">type text</string>
+    <string name="button_send">Send</string>
+    <string name="imageButtonText">SelectImage</string>
+    <string name="sendButtonText">SendMessage</string>
+    <string name="convImageText">convImage</string>
+
+</resources>

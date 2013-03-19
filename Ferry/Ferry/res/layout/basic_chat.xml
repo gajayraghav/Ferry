@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:orientation="vertical"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent"
+ >
+<TextView
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:text="@string/hello"
+ />
+<EditText
+ android:id="@+id/textin"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:text="@string/inputText"
+ />
+<EditText
+ android:id="@+id/ipin"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:text="@string/ipText"
+ />
+<EditText
+ android:id="@+id/portin"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:inputType="number"
+ android:text="@string/portText"
+ />
+<Button
+ android:id="@+id/send"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:text="Send"
+ />
+<Button
+ android:id="@+id/connWifi"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ android:text="ToggleWifi"
+ />
+<TextView
+ android:id="@+id/textout"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content"
+ />
+</LinearLayout>
