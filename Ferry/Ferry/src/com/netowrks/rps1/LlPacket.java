@@ -1,4 +1,4 @@
-package com.netowrks.ferry1;
+package com.netowrks.rps1;
 
 import java.io.Serializable;
 

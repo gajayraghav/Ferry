@@ -1,4 +1,4 @@
-package com.netowrks.ferry1;
+package com.netowrks.rps1;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.netowrks.ferry1.R;
+import com.netowrks.rps1.R;
 
 import android.app.Activity;
 import android.os.Bundle;

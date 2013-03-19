@@ -1,4 +1,4 @@
-package com.netowrks.ferry1;
+package com.netowrks.rps1;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,6 +126,7 @@ public class LowerLayer {
 				receiveSock.close();
 
 			} catch (Exception e) {
+				System.out.println("Error: "+e.toString());
 				e.printStackTrace();
 				return null;
 			}
