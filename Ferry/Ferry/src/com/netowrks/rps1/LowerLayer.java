@@ -18,10 +18,10 @@ import android.os.AsyncTask;
 @SuppressLint("UseSparseArrays")
 public class LowerLayer {
 
-	private int nodeID = 0;
+	public static String nodeID = "0";
 	final int port = 8888;
 	private ServerSocket servSock;
-	static HashMap<Integer, String> nodeID_IPAddrs = new HashMap<Integer, String>();
+	static HashMap<String, String> nodeID_IPAddrs = new HashMap<String, String>();
 	static private List<LlPacket> outputQueue = new ArrayList<LlPacket>();
 	static int availableBuffer = 10000000; //10MB
 	static int instanceCount = 0;
@@ -59,8 +59,8 @@ public class LowerLayer {
 				 * Fill the outgoing packet : Note - this needs to come above
 				 * the socket creating part
 				 */
+				sendPkt = params[0];
 				sendPkt.fromID = nodeID;
-				sendPkt.toID = params[0].toID;
 				sendPkt.payload = params[0].payload;
 				sendPkt.type = params[0].type;
 
@@ -99,7 +99,8 @@ public class LowerLayer {
 
 			/* Creating a new variable for receiving is necessary */
 			LlPacket sendToMl = new LlPacket();
-
+			sendToMl.type = -1; /* Just to differentiate a valid and invalid packet */
+			
 			try {
 				if (servSock == null) {
 					servSock = new ServerSocket(port);
@@ -110,7 +111,7 @@ public class LowerLayer {
 				LlPacket recvPkt = (LlPacket) ois.readObject();
 
 				/* Check if the toID matches its own nodeID */
-				if (recvPkt != null && recvPkt.toID == nodeID) {
+				if (recvPkt != null && recvPkt.toID.equals(nodeID)) {
 					String ipAddr = receiveSock.getRemoteSocketAddress()
 							.toString();
 					ipAddr = ipAddr.substring(1, ipAddr.indexOf(":"));
@@ -126,7 +127,6 @@ public class LowerLayer {
 				receiveSock.close();
 
 			} catch (Exception e) {
-				System.out.println("Error: "+e.toString());
 				e.printStackTrace();
 				return null;
 			}

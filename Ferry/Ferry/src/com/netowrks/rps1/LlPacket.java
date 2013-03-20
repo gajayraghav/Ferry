@@ -4,15 +4,9 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class LlPacket implements Serializable {
-	//Sender's node ID when node sends
-	//Reciever's ID when ferry forwards - so that reciever can check if the packet is his
-	int fromID;
-	int toID;
-	int type;
-	Object payload;
-	
-//Following elements are just for testing purposes	
-	int Recv_ID;
-	String ipAddr;
-	int port;
+	String fromID; /* This is the ID of the sender (nodeID) */
+	String toID; /* This is the ID of the receiver, which is mostly "0" denoting ferry */
+	String Recv_No; /* The phone number of the receiver */
+	int type; /* Identifier for the type of payload */
+	Object payload;	/* The actual content */
 }
