@@ -4,8 +4,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,6 +38,7 @@ private Handler handler = new Handler();
 LowerLayer Ll_instance = new LowerLayer();
 LowerLayer.RecieveHelper receiveInstance = Ll_instance.new RecieveHelper();
 HashMap<String, String> gpsList = new HashMap<String, String>();
+List<LlPacket> messageBuffer = new ArrayList<LlPacket>();
 final HashMap <String,String> Nodeidlookup = new HashMap<String, String>();
 final HashMap <String,String> Phonelookup = new HashMap<String, String>();
 /** Called when the activity is first created. */
@@ -119,12 +123,11 @@ private Button.OnClickListener buttonSendOnClickListener = new Button.OnClickLis
 		}
 	}
 };
+
 // This button takes care of updating the DB
 private Button.OnClickListener buttonUpdatesOnClickListener = new Button.OnClickListener() {
 	public void onClick(View arg0) 
 	{
-		 
-        // URL url = null;
 		
          final String urlbuilder="http://www.klusterkloud.com/RPS/api/getall.json";
          Log.v("URL", urlbuilder.toString());
@@ -169,22 +172,6 @@ private Button.OnClickListener buttonUpdatesOnClickListener = new Button.OnClick
                  			  String msg = "" + key + ":" + Phonelookup.get(key); 
                  	    	  Log.i("Phonelookup",msg);
                  			}
-                 	    /* JSONParser parser = new JSONParser();
-                 	     Object obj = parser.parse(response);
-                 	    JSONObject jsonObject = (JSONObject) obj;
-                 	    JSONArray NodeID = (JSONArray) jsonObject.get("NodeID");
-                		Iterator<String> iterator = NodeID.iterator();
-                		while (iterator.hasNext()) {
-                			Log.i("Node ID splits:",iterator.next());
-                		}
-                		*/
-                 		//JSONObject jsonObject = (JSONObject) obj;
-                 	       /* try {
-                 	            JSONObject json= (JSONObject) new JSONTokener(result).nextValue();
-                 	            JSONObject json2 = json.getJSONObject("results");
-                 	            test = (String) json2.get("name");
-                 	        }
-                 	        */
                  	    }
                  	
                  	            //TextView tv = (TextView)findViewById(R.);
@@ -235,14 +222,15 @@ public String PhonefromNodeID(String NodeID)
 private Button.OnClickListener buttonConnWifiOnClickListener = new Button.OnClickListener() {
 	public void onClick(View arg0) 
 	{
-		 
-       
-             
-         
-
-        
-
-     
+		Iterator<Entry<String, String>> gpsIter = Nodeidlookup.entrySet().iterator();
+		
+		while (gpsIter.hasNext()) {
+			String ID = gpsIter.next().getValue();
+			String Ph = PhonefromNodeID(ID);
+			if (Ph.equals("4049834075")) {
+				textOut.append("\n Ph:" + Ph + "ID: " + ID);
+			}
+		}
 	}
 };
 
@@ -264,16 +252,33 @@ private class BasicReciever implements Runnable {
 					public void run() {
 						if (recv_pkt != null) {
 
+							/* Find and store the sender's phNo and recvers nodeID */
+							recv_pkt.Send_No = PhonefromNodeID(recv_pkt.fromID);
+							recv_pkt.toID = NodeIDfromPhone(recv_pkt.Recv_No);
+							
+							/* Drop packet if either the sender or receiver is not registered (ignore recvID for gps) */
+							if (recv_pkt.Send_No == null || (recv_pkt.toID == null && recv_pkt.type != 1)) {
+								return;
+							}
+							
 							switch (recv_pkt.type) {
 							case 0:
+								recv_pkt.fromID = LowerLayer.nodeID;
+								
 								// Call the Archana's method
 								textOut.append("\n He:"
 										+ recv_pkt.payload.toString());
+								
+								/* Store the packet in message buffer */
+								messageBuffer.add(recv_pkt);
 								break;
 							case 1:
-
+								/* When a GPS coordinate is received at the ferry */
 								Toast.makeText(getApplicationContext(), recv_pkt.payload.toString(), Toast.LENGTH_LONG).show();
+								/* Store the gps data */
 								gpsList.put(recv_pkt.fromID, recv_pkt.payload.toString());
+								
+								/* Send out the entire GPS list to this node */ 
 								LowerLayer.SendHelper Send_instance = Ll_instance.new SendHelper();
 								LlPacket sendPkt = new LlPacket();
 								sendPkt.fromID = LowerLayer.nodeID;
@@ -281,9 +286,25 @@ private class BasicReciever implements Runnable {
 								sendPkt.payload = gpsList;
 								sendPkt.type = 2;
 								Send_instance.execute(sendPkt);
+								
+								/* Send out messages that are waiting for this node */
+								Iterator<LlPacket> queueIterator = messageBuffer
+										.iterator();
+								
+								/* Send out all the buffered packet for this node */
+								while (queueIterator.hasNext()){
+									LlPacket new_sendPkt = queueIterator.next();
+									if (sendPkt.toID == recv_pkt.fromID) {
+										LowerLayer.SendHelper Send_instance_temp = Ll_instance.new SendHelper();
+										Send_instance_temp.execute(new_sendPkt);
+									}
+									/* Remove data from ferry */
+									queueIterator.remove();
+								}
+								
 								break;
 							case 2:
-								// Call Ajay's method
+								// Ferry ignores GPS lists
 									break;
 								default:
 									break;

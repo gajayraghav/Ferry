@@ -40,16 +40,16 @@
  android:layout_height="wrap_content"
  android:text="ToggleWifi"
  />
+<Button
+    android:id="@+id/Updates"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Update DB" 
+    />
 <TextView
  android:id="@+id/textout"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
  />
-
-<Button
-    android:id="@+id/Updates"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Update DB" />
 
 </LinearLayout>

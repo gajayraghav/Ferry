@@ -1,5 +1,8 @@
 package com.netowrks.rps1;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -23,7 +26,7 @@ public class LowerLayer {
 	private ServerSocket servSock;
 	static HashMap<String, String> nodeID_IPAddrs = new HashMap<String, String>();
 	static private List<LlPacket> outputQueue = new ArrayList<LlPacket>();
-	static int availableBuffer = 10000000; //10MB
+	static int availableBuffer = 100000000; //100MB
 	static int instanceCount = 0;
 
 	LowerLayer() {
@@ -169,6 +172,7 @@ public class LowerLayer {
 			}
 		}
 	}
+
 
 	/* This functionality is not required for the ferry */
 /*	
