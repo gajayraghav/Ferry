@@ -35,7 +35,7 @@ import android.widget.Toast;
 public class Ferry extends Activity {
 
 	TextView textOut;
-	EditText textIn, ipIn, phNumIn;
+	EditText textIn, phNumIn;
 	private Handler handler = new Handler();
 	LowerLayer Ll_instance = new LowerLayer();
 	LowerLayer.RecieveHelper receiveInstance = Ll_instance.new RecieveHelper();
@@ -54,7 +54,6 @@ public class Ferry extends Activity {
 			setContentView(R.layout.basic_chat);
 
 			textIn = (EditText) findViewById(R.id.textin);
-			ipIn = (EditText) findViewById(R.id.ipin);
 			phNumIn = (EditText) findViewById(R.id.phNumIn);
 
 			Button buttonSend = (Button) findViewById(R.id.send);
@@ -225,6 +224,7 @@ public class Ferry extends Activity {
 			Iterator<Entry<String, String>> gpsIter = Nodeidlookup.entrySet()
 					.iterator();
 			String phNum = phNumIn.getText().toString();
+			textOut.setText("");
 			while (gpsIter.hasNext()) {
 				String ID = gpsIter.next().getValue();
 				String Ph = PhonefromNodeID(ID);

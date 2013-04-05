@@ -17,13 +17,6 @@
  android:text="@string/inputText"
  />
 <EditText
- android:id="@+id/ipin"
- android:layout_width="fill_parent"
- android:layout_height="wrap_content"
- android:inputType="text"
- android:text="@string/ipText"
- />
-<EditText
  android:id="@+id/phNumIn"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
