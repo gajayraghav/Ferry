@@ -1,8 +1,5 @@
 package com.netowrks.rps1;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -15,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import com.rps.utilities.ChatMessage;
+
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
@@ -26,7 +25,7 @@ public class LowerLayer {
 	private ServerSocket servSock;
 	static HashMap<String, String> nodeID_IPAddrs = new HashMap<String, String>();
 	static private List<LlPacket> outputQueue = new ArrayList<LlPacket>();
-	static int availableBuffer = 100000000; //100MB
+	static int availableBuffer = 100000000; // 100MB
 	static int instanceCount = 0;
 
 	LowerLayer() {
@@ -73,7 +72,20 @@ public class LowerLayer {
 				OutputStream os = sendSock.getOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(os);
 
+				ChatMessage msg = null;
+				if (sendPkt.type == 0 && sendPkt.payload instanceof ChatMessage)
+				{
+					msg = (ChatMessage) sendPkt.payload;
+					System.out
+							.println("Ferry : Trying to send message of type "
+									+ msg.getMessageType().toString());
+				}
+				
 				oos.writeObject(sendPkt);
+				
+				if (sendPkt.type == 0 && sendPkt.payload instanceof ChatMessage)
+					System.out.println("Ferry : Sent " + msg.getContent()
+							+ " to " + sendPkt.Recv_No);
 
 				/* Close */
 				oos.close();
@@ -102,8 +114,11 @@ public class LowerLayer {
 
 			/* Creating a new variable for receiving is necessary */
 			LlPacket sendToMl = new LlPacket();
-			sendToMl.type = -1; /* Just to differentiate a valid and invalid packet */
-			
+			sendToMl.type = -1; /*
+								 * Just to differentiate a valid and invalid
+								 * packet
+								 */
+
 			try {
 				if (servSock == null) {
 					servSock = new ServerSocket(port);
@@ -120,8 +135,8 @@ public class LowerLayer {
 					ipAddr = ipAddr.substring(1, ipAddr.indexOf(":"));
 					nodeID_IPAddrs.put(recvPkt.fromID, ipAddr);
 					sendToMl = recvPkt;
-					
-				/* Else this is a wrongly delivered packet. Return null. */
+
+					/* Else this is a wrongly delivered packet. Return null. */
 				} else {
 					// Do nothing, may be go ahead and scold the sender :P
 				}
@@ -173,13 +188,11 @@ public class LowerLayer {
 		}
 	}
 
-
 	/* This functionality is not required for the ferry */
-/*	
-	private String intToIp(int ipAddrs) {
-
-		return ((ipAddrs & 0xFF) + "." + ((ipAddrs >> 8) & 0xFF) + "."
-				+ ((ipAddrs >> 16) & 0xFF) + "." + ((ipAddrs >> 24) & 0xFF));
-	}
-*/
+	/*
+	 * private String intToIp(int ipAddrs) {
+	 * 
+	 * return ((ipAddrs & 0xFF) + "." + ((ipAddrs >> 8) & 0xFF) + "." +
+	 * ((ipAddrs >> 16) & 0xFF) + "." + ((ipAddrs >> 24) & 0xFF)); }
+	 */
 }

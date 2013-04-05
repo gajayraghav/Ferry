@@ -7,7 +7,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="inputText">Enter Message</string>
     <string name="ipText">IP Address</string>
-    <string name="portText">Port Number</string>
+    <string name="phNumText">4049161368</string>
     <string name="hello">type text</string>
     <string name="button_send">Send</string>
     <string name="imageButtonText">SelectImage</string>

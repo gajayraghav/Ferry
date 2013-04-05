@@ -13,22 +13,23 @@
  android:id="@+id/textin"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
+ android:inputType="text"
  android:text="@string/inputText"
  />
 <EditText
  android:id="@+id/ipin"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
+ android:inputType="text"
  android:text="@string/ipText"
  />
 <EditText
- android:id="@+id/portin"
+ android:id="@+id/phNumIn"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
  android:inputType="number"
- android:text="@string/portText"
- />
-<Button
+ android:text="@string/phNumText"/>
+ <Button
  android:id="@+id/send"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
@@ -38,7 +39,7 @@
  android:id="@+id/connWifi"
  android:layout_width="fill_parent"
  android:layout_height="wrap_content"
- android:text="ToggleWifi"
+ android:text="Check registration"
  />
 <Button
     android:id="@+id/Updates"
