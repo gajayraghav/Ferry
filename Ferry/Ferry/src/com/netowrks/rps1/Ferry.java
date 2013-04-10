@@ -1,9 +1,5 @@
 package com.netowrks.rps1;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,12 +75,7 @@ public class Ferry extends Activity {
 		@Override
 		public void onClick(View arg0) {
 
-			Socket socket = null;
-			DataOutputStream dataOutputStream = null;
-			DataInputStream dataInputStream = null;
-
 			try {
-
 				LowerLayer.SendHelper Send_instance = Ll_instance.new SendHelper();
 				LlPacket send_pkt = new LlPacket();
 				send_pkt.payload = textIn.getText().toString();// ChatMessage
@@ -93,35 +84,8 @@ public class Ferry extends Activity {
 				send_pkt.toID = "2533"; /* Statically configured for testing */
 				Send_instance.execute(send_pkt);
 				textOut.append("\n Me:" + send_pkt.payload);
-			}
-
-			finally {
-				if (socket != null) {
-					try {
-						socket.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-				if (dataOutputStream != null) {
-					try {
-						dataOutputStream.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-				if (dataInputStream != null) {
-					try {
-						dataInputStream.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -197,9 +161,6 @@ public class Ferry extends Activity {
 						Log.e("Exception", "Exception occured in writing");
 						e.printStackTrace();
 					}
-
-					// Log.i("GET RESPONSE", response);
-
 				}
 			};
 
@@ -283,9 +244,9 @@ public class Ferry extends Activity {
 												+ msg.getMessageType()
 														.toString() + " : "
 												+ msg.getContent());
-									}
-									else
-										textOut.append("\n He : " + recv_pkt.payload);
+									} else
+										textOut.append("\n He : "
+												+ recv_pkt.payload);
 									/* Store the packet in message buffer */
 									messageBuffer.add(recv_pkt);
 									break;

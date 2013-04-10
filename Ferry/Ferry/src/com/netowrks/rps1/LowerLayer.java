@@ -145,7 +145,8 @@ public class LowerLayer {
 				receiveSock.close();
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				//System.out.println("Ferry exception in reciever helper : "+e.getMessage());
+				//e.printStackTrace();
 				return null;
 			}
 
